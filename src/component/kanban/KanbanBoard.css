@@ -25,7 +25,7 @@
   background: #fff;
   border-radius: 14px;
   box-shadow: 0 2px 12px rgba(0,0,0,0.06);
-  padding: 1rem 0.5rem 1.5rem 0.5rem;
+  padding: 1rem 0.5rem 0.5rem 0.5rem;
   display: flex;
   flex-direction: column;
   align-items: stretch;
@@ -34,7 +34,7 @@
 .kanban-column-title {
   font-size: 1.1rem;
   font-weight: 600;
-  margin-bottom: 1rem;
+  margin-bottom: 0.8rem;
   text-align: center;
   color: #222;
 }
@@ -42,14 +42,23 @@
 .kanban-droppable {
   min-height: 40px;
   flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  margin-bottom: 0.3rem;
 }
 
 .kanban-card {
-  margin-bottom: 0.7rem;
   border-radius: 10px;
   box-shadow: 0 1px 6px rgba(0,0,0,0.07);
   cursor: pointer;
   transition: box-shadow 0.2s;
+  margin-bottom: 0;
+  background: #fff;
+  border-bottom: 1px solid #f3f4f6;
+}
+.kanban-card:last-child {
+  border-bottom: none;
 }
 .kanban-card:hover {
   box-shadow: 0 4px 16px rgba(0,0,0,0.13);
@@ -59,12 +68,39 @@
   font-weight: 500;
   color: #333;
 }
+
+.kanban-new-page-card {
+  background: #f8fafc;
+  border: 1.5px dashed #d1d5db;
+  box-shadow: none;
+  margin-top: 0;
+  margin-bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  transition: background 0.2s, border 0.2s;
+}
+.kanban-new-page-card:hover {
+  background: #e0e7ef;
+  border-color: #3b82f6;
+}
 .kanban-new-page {
-  margin-top: 0.5rem;
+  margin-top: 0;
   color: #1976d2;
   font-size: 0.97rem;
   border-radius: 6px;
   width: 100%;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  outline: none;
+}
+.kanban-new-page:active, .kanban-new-page:focus {
+  background: transparent;
+  box-shadow: none;
 }
 @media (max-width: 900px) {
   .kanban-columns {
@@ -73,6 +109,6 @@
   .kanban-column {
     min-width: 180px;
     flex: 0 0 180px;
-    padding: 0.7rem 0.2rem 1rem 0.2rem;
+    padding: 0.7rem 0.2rem 0.3rem 0.2rem;
   }
 } 

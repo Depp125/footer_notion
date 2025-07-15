@@ -1,0 +1,493 @@
+.notion-modal .p-dialog-content {
+  padding: 0;
+  background: #fff;
+}
+
+.modal-content {
+  padding: 24px;
+}
+
+.modal-header {
+  margin-bottom: 24px;
+}
+
+.modal-title {
+  font-size: 24px;
+  font-weight: 400;
+  color: #6b7280;
+  margin: 0;
+  font-family: 'Segoe UI', Arial, sans-serif;
+}
+
+.modal-body {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.info-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 8px 0;
+}
+
+.info-label {
+  font-size: 14px;
+  font-weight: 500;
+  color: #374151;
+  min-width: 60px;
+}
+
+.status-dropdown {
+  min-width: 120px;
+}
+
+.status-dropdown .p-dropdown-label {
+  background: #f3f4f6;
+  border: 1px solid #d1d5db;
+  border-radius: 16px;
+  padding: 4px 12px;
+  font-size: 12px;
+  color: #6b7280;
+}
+
+.type-field {
+  flex: 1;
+}
+
+.type-display {
+  display: inline-block;
+  padding: 4px 8px;
+  color: #374151;
+  font-size: 14px;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+}
+
+.type-display:hover {
+  background-color: #f3f4f6;
+}
+
+.type-input {
+  width: 100%;
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
+  padding: 4px 8px;
+  font-size: 14px;
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.section-label {
+  font-size: 14px;
+  font-weight: 500;
+  color: #374151;
+}
+
+.title-input,
+.notes-input {
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  padding: 8px 12px;
+  font-size: 14px;
+}
+
+.title-input:focus,
+.notes-input:focus,
+.type-input:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
+}
+
+.subtask-input-group {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.subtask-input-group .p-inputtext {
+  flex: 1;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  padding: 8px 12px;
+  font-size: 14px;
+}
+
+.subtask-list {
+  list-style: none;
+  padding: 0;
+  margin: 8px 0 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.subtask-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 0;
+}
+
+.subtask-text {
+  flex: 1;
+  font-size: 14px;
+  color: #374151;
+}
+
+.subtask-done {
+  flex: 1;
+  font-size: 14px;
+  color: #9ca3af;
+  text-decoration: line-through;
+}
+
+.modal-footer {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 24px;
+  padding-top: 16px;
+  border-top: 1px solid #e5e7eb;
+}
+
+/* PrimeReact component overrides */
+.notion-modal .p-dialog-header {
+  display: none;
+}
+
+.notion-modal .p-dialog {
+  border-radius: 8px;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+.notion-modal .p-dropdown-panel {
+  border-radius: 6px;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+} 
+
+.notion-sidebar .p-sidebar {
+  border-radius: 0;
+  box-shadow: -2px 0 16px rgba(0,0,0,0.07);
+  top: 0;
+  right: 0;
+  height: 100vh;
+  max-width: 540px;
+  min-width: 340px;
+}
+
+.notion-sidebar .p-sidebar-content {
+  padding: 0;
+  height: 100vh;
+  background: #fff;
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar-content {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  padding: 0 0 0 0;
+}
+
+.sidebar-header {
+  padding: 32px 32px 0 32px;
+  border-bottom: 1px solid #f3f4f6;
+}
+
+.sidebar-title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #444;
+  margin: 0 0 8px 0;
+  font-family: 'Segoe UI', Arial, sans-serif;
+}
+
+.sidebar-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 24px 32px 0 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.info-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 8px 0;
+}
+
+.info-label {
+  font-size: 14px;
+  font-weight: 500;
+  color: #374151;
+  min-width: 60px;
+}
+
+.status-dropdown {
+  min-width: 120px;
+}
+
+.status-dropdown .p-dropdown-label {
+  background: #f3f4f6;
+  border: 1px solid #d1d5db;
+  border-radius: 16px;
+  padding: 4px 12px;
+  font-size: 12px;
+  color: #6b7280;
+}
+
+.type-field {
+  flex: 1;
+}
+
+.type-display {
+  display: inline-block;
+  padding: 4px 8px;
+  color: #374151;
+  font-size: 14px;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+}
+
+.type-display:hover {
+  background-color: #f3f4f6;
+}
+
+.type-input {
+  width: 100%;
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
+  padding: 4px 8px;
+  font-size: 14px;
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.section-label {
+  font-size: 14px;
+  font-weight: 500;
+  color: #374151;
+}
+
+.title-input,
+.notes-input {
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  padding: 8px 12px;
+  font-size: 14px;
+}
+
+.title-input:focus,
+.notes-input:focus,
+.type-input:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
+}
+
+.subtask-input-group {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.subtask-input-group .p-inputtext {
+  flex: 1;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  padding: 8px 12px;
+  font-size: 14px;
+}
+
+.subtask-list {
+  list-style: none;
+  padding: 0;
+  margin: 8px 0 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.subtask-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 0;
+}
+
+.subtask-text {
+  flex: 1;
+  font-size: 14px;
+  color: #374151;
+}
+
+.subtask-done {
+  flex: 1;
+  font-size: 14px;
+  color: #9ca3af;
+  text-decoration: line-through;
+}
+
+.sidebar-footer {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 24px;
+  padding: 16px 32px;
+  border-top: 1px solid #e5e7eb;
+  background: #fff;
+}
+
+/* Button styling fixes */
+.sidebar-footer .p-button {
+  color: #fff;
+  font-weight: 500;
+  border-radius: 6px;
+  padding: 8px 16px;
+  font-size: 14px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.sidebar-footer .p-button.p-button-danger {
+  background: #dc2626;
+  color: #fff;
+}
+
+.sidebar-footer .p-button.p-button-danger:hover {
+  background: #b91c1c;
+}
+
+.sidebar-footer .p-button:not(.p-button-danger) {
+  background: #3b82f6;
+  color: #fff;
+}
+
+.sidebar-footer .p-button:not(.p-button-danger):hover {
+  background: #2563eb;
+}
+
+/* Sub-task buttons */
+.subtask-item .p-button {
+  color: #6b7280;
+  background: transparent;
+  border: none;
+  padding: 4px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.subtask-item .p-button:hover {
+  background: #f3f4f6;
+}
+
+.subtask-item .p-button.p-button-danger {
+  color: #dc2626;
+}
+
+.subtask-item .p-button.p-button-danger:hover {
+  background: #fef2f2;
+}
+
+/* Add sub-task button */
+.subtask-input-group .p-button {
+  background: #3b82f6;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 12px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.subtask-input-group .p-button:hover {
+  background: #2563eb;
+}
+
+/* ConfirmDialog styling fixes */
+.p-confirm-dialog .p-dialog-content {
+  padding: 24px;
+}
+
+.p-confirm-dialog .p-dialog-header {
+  padding: 16px 24px 0 24px;
+}
+
+.p-confirm-dialog .p-dialog-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #374151;
+}
+
+.p-confirm-dialog .p-dialog-message {
+  font-size: 14px;
+  color: #6b7280;
+  margin: 16px 0;
+}
+
+.p-confirm-dialog .p-dialog-footer {
+  padding: 16px 24px 24px 24px;
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+}
+
+.p-confirm-dialog .p-button {
+  padding: 8px 16px;
+  font-size: 14px;
+  font-weight: 500;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s;
+  min-width: 80px;
+}
+
+.p-confirm-dialog .p-button.p-confirm-dialog-reject {
+  background: #6b7280;
+  color: #fff;
+}
+
+.p-confirm-dialog .p-button.p-confirm-dialog-reject:hover {
+  background: #4b5563;
+}
+
+.p-confirm-dialog .p-button.p-confirm-dialog-accept {
+  background: #dc2626;
+  color: #fff;
+}
+
+.p-confirm-dialog .p-button.p-confirm-dialog-accept:hover {
+  background: #b91c1c;
+}
+
+/* Hide the default modal header */
+.notion-sidebar .p-sidebar-header {
+  display: none;
+}
+
+@media (max-width: 700px) {
+  .notion-sidebar .p-sidebar {
+    min-width: 0;
+    width: 100vw !important;
+    max-width: 100vw !important;
+  }
+  .sidebar-header, .sidebar-body, .sidebar-footer {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+} 

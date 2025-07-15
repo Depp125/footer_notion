@@ -9,34 +9,41 @@ import KanbanCard from './KanbanCard';
 
 const initialData = {
   columns: {
-    remember: { name: 'Remember', items: [{ title: 'Life Lessons', notes: '', status: 'Not Started', subtasks: [] }] },
-    goals: { name: 'Goals', items: [
-      { title: 'Spiritual', notes: '', status: 'Not Started', subtasks: [] },
-      { title: 'Social', notes: '', status: 'Not Started', subtasks: [] },
-      { title: 'Health', notes: '', status: 'Not Started', subtasks: [] }
-    ] },
-    grateful: { name: 'Grateful For', items: [
-      { title: 'Person', notes: '', status: 'Not Started', subtasks: [] },
-      { title: 'Things you own', notes: '', status: 'Not Started', subtasks: [] },
-      { title: 'Internet', notes: '', status: 'Not Started', subtasks: [] }
-    ] },
-    habitsAdd: { name: 'Habits to Add', items: [
-      { title: 'Gym', notes: '', status: 'Not Started', subtasks: [] },
-      { title: 'Reading', notes: '', status: 'Not Started', subtasks: [] }
-    ] },
-    habitsStop: { name: 'Habits to Stop', items: [
-      { title: 'Smoking', notes: '', status: 'Not Started', subtasks: [] }
-    ] },
-    personalTools: { name: 'Personal Tools', items: [] },
-    professionalTools: { name: 'Professional Tools', items: [] },
-    health: { name: 'Health', items: [
-      { title: 'CBC', notes: '', status: 'Not Started', subtasks: [] },
-      { title: 'HBV', notes: '', status: 'Not Started', subtasks: [] }
-    ] },
-    themes: { name: 'Themes', items: [] },
-    hobbies: { name: 'Hobbies', items: [
-      { title: 'Movies', notes: '', status: 'Not Started', subtasks: [] }
-    ] }
+    remember: { 
+      name: 'Remember', 
+      items: [
+        { title: 'Life Lessons', notes: '', status: 'Not Started', type: 'Remember', subtasks: [] }
+      ] 
+    },
+    goals: { 
+      name: 'Goals', 
+      items: [
+        { title: 'Spiritual', notes: '', status: 'Not Started', type: 'Goals', subtasks: [] },
+        { title: 'Social', notes: '', status: 'Not Started', type: 'Goals', subtasks: [] },
+        { title: 'Health', notes: '', status: 'Not Started', type: 'Goals', subtasks: [] }
+      ] 
+    },
+    grateful: { 
+      name: 'Grateful For', 
+      items: [
+        { title: 'Person', notes: '', status: 'Not Started', type: 'Grateful For', subtasks: [] },
+        { title: 'Things you own', notes: '', status: 'Not Started', type: 'Grateful For', subtasks: [] },
+        { title: 'Internet', notes: '', status: 'Not Started', type: 'Grateful For', subtasks: [] }
+      ] 
+    },
+    habitsAdd: { 
+      name: 'Habits to Add', 
+      items: [
+        { title: 'Gym', notes: '', status: 'Not Started', type: 'Habits to Add', subtasks: [] },
+        { title: 'Reading', notes: '', status: 'Not Started', type: 'Habits to Add', subtasks: [] }
+      ] 
+    },
+    habitsRemove: { 
+      name: 'Habits to Remove', 
+      items: [
+        { title: 'Smoking', notes: '', status: 'Not Started', type: 'Habits to Remove', subtasks: [] }
+      ] 
+    }
   }
 };
 
@@ -48,6 +55,7 @@ const KanbanBoard = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedCard, setSelectedCard] = useState(null);
   const [selectedColKey, setSelectedColKey] = useState(null);
+  const [isAddMode, setIsAddMode] = useState(false);
 
   useEffect(() => {
     localStorage.setItem('kanbanData', JSON.stringify(data));
@@ -85,39 +93,53 @@ const KanbanBoard = () => {
   };
 
   const handleAddCard = (colKey) => {
-    const title = prompt('Enter card title:');
-    if (!title) return;
-    setData(prev => {
-      const newItems = [...prev.columns[colKey].items, { title, notes: '', status: 'Not Started', subtasks: [] }];
-      return {
-        ...prev,
-        columns: {
-          ...prev.columns,
-          [colKey]: { ...prev.columns[colKey], items: newItems }
-        }
-      };
+    setSelectedColKey(colKey);
+    setSelectedCard({
+      title: '',
+      notes: '',
+      status: 'Not Started',
+      type: data.columns[colKey].name,
+      subtasks: []
     });
+    setIsAddMode(true);
+    setModalVisible(true);
   };
 
   const handleCardClick = (colKey, card, idx) => {
     setSelectedColKey(colKey);
     setSelectedCard({ ...card, idx });
+    setIsAddMode(false);
     setModalVisible(true);
   };
 
   const handleSaveCard = (updatedCard) => {
-    setData(prev => {
-      const col = prev.columns[selectedColKey];
-      const newItems = [...col.items];
-      newItems[selectedCard.idx] = updatedCard;
-      return {
-        ...prev,
-        columns: {
-          ...prev.columns,
-          [selectedColKey]: { ...col, items: newItems }
-        }
-      };
-    });
+    if (isAddMode) {
+      setData(prev => {
+        const col = prev.columns[selectedColKey];
+        const newItems = [...col.items, updatedCard];
+        return {
+          ...prev,
+          columns: {
+            ...prev.columns,
+            [selectedColKey]: { ...col, items: newItems }
+          }
+        };
+      });
+    } else {
+      setData(prev => {
+        const col = prev.columns[selectedColKey];
+        const newItems = [...col.items];
+        newItems[selectedCard.idx] = updatedCard;
+        return {
+          ...prev,
+          columns: {
+            ...prev.columns,
+            [selectedColKey]: { ...col, items: newItems }
+          }
+        };
+      });
+    }
+    setIsAddMode(false);
   };
 
   const handleDeleteCard = (card) => {
@@ -162,6 +184,12 @@ const KanbanBoard = () => {
                         )}
                       </Draggable>
                     ))}
+                    {/* New Page card as last row */}
+                    <div style={{ width: '100%' }}>
+                      <Card className="kanban-card kanban-new-page-card" onClick={() => handleAddCard(colKey)}>
+                        <Button label="New Page" className="p-button-text kanban-new-page" style={{ width: '100%' }} />
+                      </Card>
+                    </div>
                     {provided.placeholder}
                   </div>
                 )}
@@ -172,10 +200,11 @@ const KanbanBoard = () => {
       </DragDropContext>
       <CardModal
         visible={modalVisible}
-        onHide={() => setModalVisible(false)}
+        onHide={() => { setModalVisible(false); setIsAddMode(false); }}
         card={selectedCard}
         onSave={handleSaveCard}
         onDelete={handleDeleteCard}
+        isAddMode={isAddMode}
       />
     </div>
   );
