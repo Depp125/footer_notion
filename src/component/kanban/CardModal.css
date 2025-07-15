@@ -491,3 +491,116 @@
     padding-right: 12px;
   }
 } 
+
+/* Notion-style Kanban UI/UX */
+
+.kanban-board {
+  font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+  background: #f7f8fa;
+  min-height: 100vh;
+  width: 100vw;
+  overflow-x: auto;
+  padding: 0;
+  box-sizing: border-box;
+}
+.kanban-board h2 {
+  font-size: 2.2rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  color: #222;
+}
+.kanban-columns {
+  display: flex;
+  gap: 1.5rem;         /* Increase this value for more space between columns */
+  overflow-x: auto;
+  padding: 1rem 0;
+}
+.kanban-column {
+  min-width: 320px;    /* Match or slightly exceed your card min-width */
+  flex: 0 0 320px;
+  background: none;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+.kanban-column-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #222;
+  margin-bottom: 0.5rem;
+  margin-left: 0.3rem;
+}
+.kanban-droppable {
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;   /* Increase this value for more space between boxes */
+  min-height: 40px;
+}
+.kanban-card,
+.kanban-new-page-card {
+  background: #fff;
+  border-radius: 8px;
+  border: 1px solid #e3e6ea;
+  /* Wider and shorter: */
+  padding: 0.18rem 1.6rem;      /* Less vertical, more horizontal padding */
+  font-size: 0.95rem;
+  color: #222;
+  display: flex;
+  align-items: center;
+  transition: border 0.2s, background 0.2s;
+  box-shadow: none;
+  font-weight: 400;
+  min-width: 300px;             /* Wider cards */
+  min-height: 22px;             /* Shorter cards */
+}
+.kanban-card:hover {
+  background: #f6f6f7;
+  border-color: #d1d5db;
+}
+.kanban-card-title {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+  font-weight: 400;
+  font-size: 0.95rem;
+  color: #222;
+}
+.kanban-new-page-card {
+  background: #fafbfc;
+  border: 1.2px dashed #e3e6ea;
+  font-style: italic;
+  color: #b1b5bb;
+}
+.kanban-new-page {
+  background: transparent;
+  border: none;
+  font-size: 0.95rem;
+  font-style: italic;
+  font-weight: 400;
+  color: #b1b5bb;
+  width: 100%;
+  padding: 0;
+  text-align: left;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  box-shadow: none;
+}
+.kanban-new-page:focus,
+.kanban-new-page:active {
+  outline: none;
+  background: transparent;
+} 
+
+.kanban-card input[type="text"] {
+  height: 2.2rem;           /* Increase this value for more height */
+  font-size: 1rem;
+  padding: 0 0.7rem;
+  border-radius: 6px;
+  border: 1.5px solid #bfc5ce;
+  box-sizing: border-box;
+  width: 100%;
+  background: #fff;
+} 
