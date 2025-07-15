@@ -498,10 +498,20 @@
   font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
   background: #f7f8fa;
   min-height: 100vh;
+  height: 100vh;
   width: 100vw;
   overflow-x: auto;
+  overflow-y: hidden;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: 0;
   padding: 0;
   box-sizing: border-box;
+  z-index: 1;
+  scrollbar-gutter: stable both-edges;
 }
 .kanban-board h2 {
   font-size: 2.2rem;
@@ -511,9 +521,12 @@
 }
 .kanban-columns {
   display: flex;
-  gap: 1.5rem;         /* Increase this value for more space between columns */
+  gap: 1.5rem;
+  min-width: 120vw; /* Force overflow for scrollbar */
+  width: max-content;
   overflow-x: auto;
-  padding: 1rem 0;
+  padding: 0;
+  min-height: 100vh;
 }
 .kanban-column {
   min-width: 320px;    /* Match or slightly exceed your card min-width */
@@ -603,4 +616,112 @@
   box-sizing: border-box;
   width: 100%;
   background: #fff;
+} 
+
+/* Always show horizontal scrollbar, fixed at the bottom */
+.kanban-board {
+  scrollbar-width: thin;
+  scrollbar-color: #e3e6ea #f7f8fa;
+}
+.kanban-board::-webkit-scrollbar {
+  height: 12px;
+  background: #f7f8fa;
+}
+.kanban-board::-webkit-scrollbar-thumb {
+  background: #e3e6ea;
+  border-radius: 6px;
+}
+.kanban-board::-webkit-scrollbar-thumb:hover {
+  background: #bfc5ce;
+}
+
+/* Ensure the scrollbar does not overlap content */
+.kanban-board {
+  padding-bottom: 12px; /* matches scrollbar height */
+}
+
+/* Remove any extra margin/padding from html/body */
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* Responsive fix for mobile */
+@media (max-width: 700px) {
+  .kanban-board, .kanban-columns {
+    min-width: 100vw;
+    width: 100vw;
+  }
+} 
+
+.kanban-board {
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  margin: 0;
+  padding: 0 0 12px 0; /* bottom padding for scrollbar */
+  box-sizing: border-box;
+  z-index: 1;
+  overflow-x: auto;   /* horizontal scroll at bottom */
+  overflow-y: auto;   /* vertical scroll at right */
+  scrollbar-gutter: stable both-edges;
+}
+
+/* Columns container stretches horizontally, not vertically */
+.kanban-columns {
+  display: flex;
+  gap: 1.5rem;
+  width: max-content;   /* only as wide as needed for columns */
+  min-height: 100vh;
+  /* Remove overflow-x/y here! */
+  padding: 0;
+}
+
+/* Optional: Style scrollbars for both axes */
+.kanban-board::-webkit-scrollbar {
+  height: 12px;
+  width: 12px;
+  background: #f7f8fa;
+}
+.kanban-board::-webkit-scrollbar-thumb {
+  background: #e3e6ea;
+  border-radius: 6px;
+}
+.kanban-board::-webkit-scrollbar-thumb:hover {
+  background: #bfc5ce;
+}
+
+/* Remove extra margin/padding from html/body */
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+} 
+
+.remember-scroll {
+  max-height: calc(100vh - 100px); /* Adjust 100px as per your header/title */
+  overflow-y: auto;
+  overflow-x: visible;
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+}
+
+/* Optional: Style the vertical scrollbar */
+.remember-scroll::-webkit-scrollbar {
+  width: 8px;
+  background: #f7f8fa;
+}
+.remember-scroll::-webkit-scrollbar-thumb {
+  background: #e3e6ea;
+  border-radius: 6px;
+}
+.remember-scroll::-webkit-scrollbar-thumb:hover {
+  background: #bfc5ce;
 } 
