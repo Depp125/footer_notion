@@ -116,6 +116,7 @@ const KanbanBoard = () => {
   const [selectedCard, setSelectedCard] = useState(null);
   const [selectedColKey, setSelectedColKey] = useState(null);
   const [isAddMode, setIsAddMode] = useState(false);
+  const [autoEditColKey, setAutoEditColKey] = useState(null);
 
   useEffect(() => {
     localStorage.setItem("kanbanData", JSON.stringify(data));
@@ -187,6 +188,7 @@ const KanbanBoard = () => {
     setData((prev) => {
       const col = prev.columns[colKey];
       const newItems = [...col.items];
+      const wasNew = !!newItems[idx].isNew;
       if (newTitle.trim() === "") {
         // Remove the new card if title is empty
         newItems.splice(idx, 1);
@@ -197,6 +199,17 @@ const KanbanBoard = () => {
           notes: newTitle,
           isNew: false,
         };
+      }
+      // If this was a new card and user entered a title, add another new card for chaining
+      if (wasNew && newTitle.trim() !== "") {
+        newItems.push({
+          title: "",
+          notes: "",
+          status: "Not Started",
+          type: col.name,
+          subtasks: [],
+          isNew: true,
+        });
       }
       return {
         ...prev,
@@ -266,11 +279,91 @@ const KanbanBoard = () => {
     setModalVisible(false);
   };
 
+  // Add column handlers
+  const handleEditCol = (colKey, newName) => {
+    setData((prev) => ({
+      ...prev,
+      columns: {
+        ...prev.columns,
+        [colKey]: {
+          ...prev.columns[colKey],
+          name: newName,
+        },
+      },
+    }));
+    if (autoEditColKey === colKey) setAutoEditColKey(null);
+  };
+  const handleDeleteCol = (colKey) => {
+    setData((prev) => {
+      const newCols = { ...prev.columns };
+      delete newCols[colKey];
+      return { ...prev, columns: newCols };
+    });
+  };
+  const handleAddCol = () => {
+    let base = "newCol";
+    let idx = 1;
+    while (data.columns[base + idx]) idx++;
+    const newKey = base + idx;
+    setData((prev) => ({
+      ...prev,
+      columns: {
+        ...prev.columns,
+        [newKey]: {
+          name: "Untitled",
+          items: [],
+        },
+      },
+    }));
+    setTimeout(() => setAutoEditColKey(newKey), 0);
+  };
+  const handleAddColLeft = (colKey) => {
+    let base = "newCol";
+    let idx = 1;
+    while (data.columns[base + idx]) idx++;
+    const newKey = base + idx;
+    setData((prev) => {
+      const entries = Object.entries(prev.columns);
+      const newCols = {};
+      let inserted = false;
+      for (let i = 0; i < entries.length; i++) {
+        if (entries[i][0] === colKey && !inserted) {
+          newCols[newKey] = { name: "Untitled", items: [] };
+          inserted = true;
+        }
+        newCols[entries[i][0]] = entries[i][1];
+      }
+      return { ...prev, columns: newCols };
+    });
+    setTimeout(() => setAutoEditColKey(newKey), 0);
+  };
+  const handleAddColRight = (colKey) => {
+    let base = "newCol";
+    let idx = 1;
+    while (data.columns[base + idx]) idx++;
+    const newKey = base + idx;
+    setData((prev) => {
+      const entries = Object.entries(prev.columns);
+      const newCols = {};
+      for (let i = 0; i < entries.length; i++) {
+        newCols[entries[i][0]] = entries[i][1];
+        if (entries[i][0] === colKey) {
+          newCols[newKey] = { name: "Untitled", items: [] };
+        }
+      }
+      return { ...prev, columns: newCols };
+    });
+    setTimeout(() => setAutoEditColKey(newKey), 0);
+  };
+
   return (
     <div className="kanban-board">
       <h2>Subconscious Profile</h2>
       <DragDropContext onDragEnd={onDragEnd}>
-        <div className="kanban-columns">
+        <div
+          className="kanban-columns"
+          style={{ display: "flex", alignItems: "flex-start" }}
+        >
           {Object.entries(data.columns).map(([colKey, col]) => (
             <KanbanColumn
               key={colKey}
@@ -278,6 +371,12 @@ const KanbanBoard = () => {
               col={col}
               onAddCard={handleAddCard}
               onCardClick={handleCardClick}
+              onEditCol={handleEditCol}
+              onDeleteCol={handleDeleteCol}
+              onAddCol={handleAddCol}
+              onAddColLeft={handleAddColLeft}
+              onAddColRight={handleAddColRight}
+              autoEdit={autoEditColKey === colKey}
             >
               <Droppable droppableId={colKey}>
                 {(provided) => (
@@ -304,6 +403,11 @@ const KanbanBoard = () => {
                               handleInlineEdit(colKey, idx, newTitle)
                             }
                             isEditing={!!item.isNew}
+                            onRequestAddNewCard={
+                              item.isNew
+                                ? () => handleAddCard(colKey)
+                                : undefined
+                            }
                           />
                         )}
                       </Draggable>
@@ -327,6 +431,23 @@ const KanbanBoard = () => {
               </Droppable>
             </KanbanColumn>
           ))}
+          <div
+            style={{ display: "flex", alignItems: "center", height: "100%" }}
+          >
+            <button
+              onClick={handleAddCol}
+              style={{
+                background: "none",
+                border: "none",
+                cursor: "pointer",
+                fontSize: "1rem",
+                color: "#888",
+                marginTop: 0,
+              }}
+            >
+              + Add section
+            </button>
+          </div>
         </div>
       </DragDropContext>
       <CardModal

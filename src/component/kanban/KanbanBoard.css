@@ -46,8 +46,8 @@
   border-radius: 8px;
   border: 1px solid #e3e6ea;
   padding: 0.4rem 0.8rem;
-  font-size: 0.95rem;
-  color: #222;
+  font-size: 0.85rem;
+  color: #424242;
   display: flex;
   align-items: center;
   transition: border 0.2s, background 0.2s;

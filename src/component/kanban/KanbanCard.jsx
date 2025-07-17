@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Card } from "primereact/card";
 import { Button } from "primereact/button";
 
@@ -8,9 +8,11 @@ const KanbanCard = ({
   provided,
   onEdit,
   isEditing: isEditingProp,
+  onRequestAddNewCard, // NEW PROP
 }) => {
   const [isEditing, setIsEditing] = useState(!!isEditingProp);
   const [editValue, setEditValue] = useState(item.title);
+  const inputRef = useRef(null);
 
   useEffect(() => {
     if (isEditingProp) {
@@ -19,30 +21,34 @@ const KanbanCard = ({
     }
   }, [isEditingProp, item.title]);
 
-  // Enter inline edit mode
+  useEffect(() => {
+    if (isEditing && inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, [isEditing]);
+
   const startEdit = (e) => {
     e.stopPropagation();
     setEditValue(item.title);
     setIsEditing(true);
   };
 
-  // Save and exit edit mode
   const finishEdit = () => {
     setIsEditing(false);
-    if (editValue !== item.title && onEdit) {
+    if (onEdit) {
       onEdit(editValue);
-    } else if (onEdit) {
-      onEdit(editValue); // For new card, even if unchanged
     }
   };
 
   const handleEditKeyDown = (e) => {
     if (e.key === "Enter") {
       finishEdit();
+      if (onRequestAddNewCard) {
+        onRequestAddNewCard();
+      }
     }
   };
 
-  // Only open modal if not editing and not clicking pencil
   const handleCardClick = (e) => {
     if (!isEditing) {
       onClick();
@@ -57,6 +63,7 @@ const KanbanCard = ({
     >
       <Card
         className="kanban-card"
+        style={{ minHeight: "36px", display: "flex", alignItems: "center" }}
         onClick={handleCardClick}
         onDoubleClick={startEdit}
       >
@@ -66,6 +73,8 @@ const KanbanCard = ({
         >
           {isEditing ? (
             <input
+              ref={inputRef}
+              id={`card-input-${item.id}`}
               type="text"
               value={editValue}
               onChange={(e) => setEditValue(e.target.value)}
