@@ -22,6 +22,7 @@ const CardModal = ({ visible, onHide, card, onSave, onDelete, isAddMode }) => {
   const [subtasks, setSubtasks] = useState(card?.subtasks || []);
   const [newSubtask, setNewSubtask] = useState("");
   const [isEditingType, setIsEditingType] = useState(false);
+  const [isEditingTitle, setIsEditingTitle] = useState(false);
 
   React.useEffect(() => {
     setTitle(card?.title || "");
@@ -29,6 +30,7 @@ const CardModal = ({ visible, onHide, card, onSave, onDelete, isAddMode }) => {
     setStatus(card?.status || "Not Started");
     setType(card?.type || "Hobbies");
     setSubtasks(card?.subtasks || []);
+    setIsEditingTitle(false); // Reset title edit mode on open/change
   }, [card, visible]);
 
   const handleSave = () => {
@@ -78,8 +80,31 @@ const CardModal = ({ visible, onHide, card, onSave, onDelete, isAddMode }) => {
       >
         <div className="sidebar-content">
           <div className="sidebar-header">
-            <h2 className="sidebar-title">
-              {isAddMode ? "New page" : title || "Untitled"}
+            <h2
+              className="sidebar-title"
+              style={{ minHeight: 40, display: "flex", alignItems: "center" }}
+            >
+              {isEditingTitle ? (
+                <InputText
+                  value={title}
+                  onChange={(e) => setTitle(e.target.value)}
+                  onBlur={() => setIsEditingTitle(false)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") setIsEditingTitle(false);
+                  }}
+                  autoFocus
+                  style={{ fontSize: "2rem", fontWeight: 700, width: "100%" }}
+                  className="title-input"
+                />
+              ) : (
+                <span
+                  style={{ flex: 1, cursor: "pointer" }}
+                  onClick={() => setIsEditingTitle(true)}
+                  title="Click to edit title"
+                >
+                  {isAddMode ? "New page" : title || "Untitled"}
+                </span>
+              )}
             </h2>
           </div>
           <div className="sidebar-body">
@@ -116,15 +141,7 @@ const CardModal = ({ visible, onHide, card, onSave, onDelete, isAddMode }) => {
                 )}
               </div>
             </div>
-            <div className="section">
-              <label className="section-label">Title</label>
-              <InputText
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-                placeholder="Enter title..."
-                className="title-input"
-              />
-            </div>
+            {/* Title input removed as title is now inline editable in heading */}
             <div className="section">
               <label className="section-label">Notes</label>
               <InputTextarea

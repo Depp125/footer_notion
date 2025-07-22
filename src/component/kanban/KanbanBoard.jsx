@@ -124,6 +124,17 @@ const KanbanBoard = () => {
 
   const onDragEnd = (result) => {
     if (!result.destination) return;
+    // Column drag
+    if (result.type === "COLUMN") {
+      const entries = Object.entries(data.columns);
+      const [removed] = entries.splice(result.source.index, 1);
+      entries.splice(result.destination.index, 0, removed);
+      const newCols = {};
+      for (const [k, v] of entries) newCols[k] = v;
+      setData({ ...data, columns: newCols });
+      return;
+    }
+    // Card drag (existing logic)
     const { source, destination } = result;
     if (
       source.droppableId === destination.droppableId &&
@@ -360,107 +371,135 @@ const KanbanBoard = () => {
     <div className="kanban-board">
       <h2>Subconscious Profile</h2>
       <DragDropContext onDragEnd={onDragEnd}>
-        <div
-          className="kanban-columns"
-          style={{ display: "flex", alignItems: "flex-start" }}
+        <Droppable
+          droppableId="all-columns"
+          direction="horizontal"
+          type="COLUMN"
         >
-          {Object.entries(data.columns).map(([colKey, col]) => (
-            <KanbanColumn
-              key={colKey}
-              colKey={colKey}
-              col={col}
-              onAddCard={handleAddCard}
-              onCardClick={handleCardClick}
-              onEditCol={handleEditCol}
-              onDeleteCol={handleDeleteCol}
-              onAddCol={handleAddCol}
-              onAddColLeft={handleAddColLeft}
-              onAddColRight={handleAddColRight}
-              autoEdit={autoEditColKey === colKey}
+          {(provided) => (
+            <div
+              className="kanban-columns"
+              style={{ display: "flex", alignItems: "flex-start" }}
+              ref={provided.innerRef}
+              {...provided.droppableProps}
             >
-              <Droppable droppableId={colKey}>
-                {(provided) => (
-                  <div
-                    ref={provided.innerRef}
-                    {...provided.droppableProps}
-                    className="kanban-droppable"
-                  >
-                    {col.items.map((item, idx) => (
-                      <Draggable
-                        key={item.title + idx}
-                        draggableId={item.title + colKey + idx}
-                        index={idx}
+              {Object.entries(data.columns).map(([colKey, col], colIdx) => (
+                <Draggable key={colKey} draggableId={colKey} index={colIdx}>
+                  {(provided) => (
+                    <div
+                      ref={provided.innerRef}
+                      {...provided.draggableProps}
+                      {...provided.dragHandleProps}
+                      style={{
+                        ...provided.draggableProps.style,
+                        height: "100%",
+                      }}
+                    >
+                      <KanbanColumn
+                        colKey={colKey}
+                        col={col}
+                        onAddCard={handleAddCard}
+                        onCardClick={handleCardClick}
+                        onEditCol={handleEditCol}
+                        onDeleteCol={handleDeleteCol}
+                        onAddCol={handleAddCol}
+                        onAddColLeft={handleAddColLeft}
+                        onAddColRight={handleAddColRight}
+                        autoEdit={autoEditColKey === colKey}
                       >
-                        {(provided) => (
-                          <KanbanCard
-                            item={item}
-                            onClick={() => {
-                              if (!item.isNew)
-                                handleCardClick(colKey, item, idx);
-                            }}
-                            provided={provided}
-                            onEdit={(newTitle) =>
-                              handleInlineEdit(colKey, idx, newTitle)
-                            }
-                            isEditing={!!item.isNew}
-                            onRequestAddNewCard={
-                              item.isNew
-                                ? () => handleAddCard(colKey)
-                                : undefined
-                            }
-                          />
-                        )}
-                      </Draggable>
-                    ))}
-                    {/* New Page card as last row */}
-                    <div style={{ width: "100%" }}>
-                      <Card
-                        className="kanban-card kanban-new-page-card"
-                        onClick={() => handleAddCard(colKey)}
-                      >
-                        <Button
-                          label="New Page"
-                          className="p-button-text kanban-new-page"
-                          style={{ width: "100%" }}
-                        />
-                      </Card>
+                        <Droppable droppableId={colKey}>
+                          {(provided) => (
+                            <div
+                              ref={provided.innerRef}
+                              {...provided.droppableProps}
+                              className="kanban-droppable"
+                            >
+                              {col.items.map((item, idx) => (
+                                <Draggable
+                                  key={item.title + idx}
+                                  draggableId={item.title + colKey + idx}
+                                  index={idx}
+                                >
+                                  {(provided) => (
+                                    <KanbanCard
+                                      item={item}
+                                      onClick={() => {
+                                        if (!item.isNew)
+                                          handleCardClick(colKey, item, idx);
+                                      }}
+                                      provided={provided}
+                                      onEdit={(newTitle) =>
+                                        handleInlineEdit(colKey, idx, newTitle)
+                                      }
+                                      isEditing={!!item.isNew}
+                                      onRequestAddNewCard={
+                                        item.isNew
+                                          ? () => handleAddCard(colKey)
+                                          : undefined
+                                      }
+                                    />
+                                  )}
+                                </Draggable>
+                              ))}
+                              {/* New Page card as last row */}
+                              <div style={{ width: "100%" }}>
+                                <Card
+                                  className="kanban-card kanban-new-page-card"
+                                  onClick={() => handleAddCard(colKey)}
+                                >
+                                  <Button
+                                    label="New Page"
+                                    className="p-button-text kanban-new-page"
+                                    style={{ width: "100%" }}
+                                  />
+                                </Card>
+                              </div>
+                              {provided.placeholder}
+                            </div>
+                          )}
+                        </Droppable>
+                      </KanbanColumn>
                     </div>
-                    {provided.placeholder}
-                  </div>
-                )}
-              </Droppable>
-            </KanbanColumn>
-          ))}
-          <div
-            style={{ display: "flex", alignItems: "center", height: "100%" }}
-          >
-            <button
-              onClick={handleAddCol}
-              style={{
-                background: "none",
-                border: "none",
-                cursor: "pointer",
-                fontSize: "1rem",
-                color: "#888",
-                marginTop: 0,
-              }}
-            >
-              + Add section
-            </button>
-          </div>
-        </div>
+                  )}
+                </Draggable>
+              ))}
+              {provided.placeholder}
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  height: "100%",
+                }}
+              >
+                <button
+                  onClick={handleAddCol}
+                  style={{
+                    background: "none",
+                    border: "none",
+                    cursor: "pointer",
+                    fontSize: "1rem",
+                    color: "#888",
+                    marginTop: 0,
+                  }}
+                >
+                  + Add section
+                </button>
+              </div>
+            </div>
+          )}
+        </Droppable>
+        <CardModal
+          visible={modalVisible}
+          onHide={() => {
+            setModalVisible(false);
+            setIsAddMode(false);
+          }}
+          card={selectedCard}
+          onSave={handleSaveCard}
+          onDelete={handleDeleteCard}
+          isAddMode={isAddMode}
+        />
       </DragDropContext>
-      <CardModal
-        visible={modalVisible}
-        onHide={() => {
-          setModalVisible(false);
-          setIsAddMode(false);
-        }}
-        card={selectedCard}
-        onSave={handleSaveCard}
-        onDelete={handleDeleteCard}
-        isAddMode={isAddMode}
-      />
     </div>
   );
 };
