@@ -6,6 +6,7 @@ import KanbanBoard from './component/kanban/KanbanBoard';
 
 function App() {
   return <KanbanBoard />;
+  // <h1>Header</h1>
 }
 
 export default App;
